@@ -93,6 +93,22 @@ public class AIController : BoardController
 
 			int lastHit = hitGrids.Count - 1;
 
+			Grid CheckDirectional(Vector2Int direction, ref bool checkFlag)
+			{
+				var coord = hitGrids[lastHit].Coords + direction;
+				if (testedGrids.ContainsKey(coord) && !testedGrids[coord].Hit)
+				{
+					checkFlag = false;
+				}
+				else
+				{
+					var grid = GetGridFromCoord(coord);
+					return grid;
+				}
+
+				return null;
+			}
+
 			// Ships are lines, so check for a line first
 			if (hitGrids.Count >= 2)
 			{
@@ -100,30 +116,19 @@ public class AIController : BoardController
 				var forwardDirection = hitGrids[lastHit].Coords - hitGrids[secondTolastHit].Coords;
 				forwardDirection.Clamp(-Vector2Int.one, Vector2Int.one * 1);
 				var reverseDirection = -forwardDirection;
+				bool checkForward = true, checkReverse = true;
 
 				for (int i = 1; i < 5; i++)
 				{
-					var forwardCoord = hitGrids[lastHit].Coords + forwardDirection * i;
-					var reverseCoord = hitGrids[lastHit].Coords + reverseDirection * i;
-					Grid grid;
-
-					if (testedGrids.ContainsKey(forwardCoord) && !testedGrids[forwardCoord].Hit)
+					if (checkForward)
 					{
-						forwardDirection = Vector2Int.zero;
-					}
-					else
-					{
-						grid = GetGridFromCoord(forwardCoord);
+						var grid = CheckDirectional(forwardDirection * i, ref checkForward);
 						if (grid != null) return grid;
 					}
 
-					if (testedGrids.ContainsKey(reverseCoord) && !testedGrids[reverseCoord].Hit)
+					if (checkReverse)
 					{
-						reverseDirection = Vector2Int.zero;
-					}
-					else
-					{
-						grid = GetGridFromCoord(reverseCoord);
+						var grid = CheckDirectional(reverseDirection * i, ref checkReverse);
 						if (grid != null) return grid;
 					}
 				}
