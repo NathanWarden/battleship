@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class Ship : MonoBehaviour
@@ -40,5 +41,10 @@ public class Ship : MonoBehaviour
 		}
 
 		return (true, placementGrids);
+	}
+
+	public bool Sunk()
+	{
+		return placementGrids.All(grid => grid.Hit);
 	}
 }

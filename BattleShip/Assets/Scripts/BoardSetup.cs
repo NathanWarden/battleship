@@ -1,10 +1,12 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class BoardSetup : MonoBehaviour
 {
-	[SerializeField] int boardSize = 10;
+	[SerializeField] GameController gameController;
+	[SerializeField] BoardData boardData;
+	int boardSize => boardData.BoardSize;
 
 	[SerializeField] Transform shipGraphics;
 	private Transform shipBoard;
@@ -37,15 +39,21 @@ public class BoardSetup : MonoBehaviour
 	}
 
 
+	void StartGame()
+	{
+		boardData.HideAllGrids();
+		trackerBoard.GetChild(0).gameObject.SetActive(true);
+
+		enabled = false;
+
+		gameController.SetupComplete(boardData);
+	}
+
+
 	private RaycastHit[] hits = new RaycastHit[10];
 
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.R))
-		{
-			SceneManager.LoadScene(0);
-		}
-
 		if (currentShip == null) return;
 
 		var ray = mainCam.ScreenPointToRay(Input.mousePosition);
@@ -98,6 +106,7 @@ public class BoardSetup : MonoBehaviour
 		else
 		{
 			currentShip = null;
+			StartGame();
 		}
 	}
 
@@ -110,6 +119,7 @@ public class BoardSetup : MonoBehaviour
 		foreach (var grid in results.placementGrids)
 		{
 			grid.Used = true;
+			grid.Ship = currentShip;
 		}
 
 		GetNextShip();
@@ -130,23 +140,30 @@ public class BoardSetup : MonoBehaviour
 		shipGraphics.localScale = scale;
 		trackerGraphics.localScale = scale;
 
-		SetupGrid(shipBoard);
-		SetupGrid(trackerBoard);
+		var boardGrids = SetupGrid(shipBoard);
+		var trackerGrids = SetupGrid(trackerBoard);
+		gridSource.SetActive(false);
+		boardData.SetGrids(boardGrids, trackerGrids);
 		textSource.SetActive(false);
 
+		List<Ship> shipList = new List<Ship>();
 		ships = new GameObject[shipPrefabs.Length];
 		for (int i = 0; i < shipPrefabs.Length; i++)
 		{
 			ships[i] = Instantiate(shipPrefabs[i].gameObject, transform);
+			shipList.Add(ships[i].GetComponent<Ship>());
 			ships[i].SetActive(false);
 		}
+		boardData.SetShips(shipList.ToArray());
 	}
 
 
-	void SetupGrid(Transform parent)
+	Grid[] SetupGrid(Transform parent)
 	{
 		var gridSquaresParent = new GameObject("GridSquares");
 		var gridSquaresTfm = gridSquaresParent.transform;
+		List<Grid> grids = new List<Grid>();
+
 		gridSquaresTfm.SetParent(parent, false);
 		gridSquaresTfm.SetSiblingIndex(0);
 		gridSquaresParent.SetActive(false);
@@ -170,8 +187,11 @@ public class BoardSetup : MonoBehaviour
 				newGrid.transform.localPosition = new Vector3(-boardSize/2f + 1 + x, 0, boardSize/2f - 1 - y);
 				newGrid.name = $"{x},{y}";
 				grid.Coords = new Vector2Int(x, y);
+				grids.Add(grid);
 			}
 		}
+
+		return grids.ToArray();
 	}
 
 
