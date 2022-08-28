@@ -105,11 +105,36 @@ public class AIController : BoardController
 			if (hitGrids.Count >= 2)
 			{
 				int secondTolastHit = hitGrids.Count - 2;
-				var direction = hitGrids[lastHit].Coords - hitGrids[secondTolastHit].Coords;
-				var grid = GetGridFromCoord(hitGrids[lastHit].Coords + direction);
-				if (grid != null) return grid;
-				grid = GetGridFromCoord(hitGrids[lastHit].Coords - direction);
-				if (grid != null) return grid;
+				var forwardDirection = hitGrids[lastHit].Coords - hitGrids[secondTolastHit].Coords;
+				forwardDirection.Clamp(-Vector2Int.one, Vector2Int.one * 1);
+				var reverseDirection = -forwardDirection;
+
+				for (int i = 1; i < 5; i++)
+				{
+					var forwardCoord = hitGrids[lastHit].Coords + forwardDirection * i;
+					var reverseCoord = hitGrids[lastHit].Coords + reverseDirection * i;
+					Grid grid;
+
+					if (testedGrids.ContainsKey(forwardCoord) && !testedGrids[forwardCoord].Hit)
+					{
+						forwardDirection = Vector2Int.zero;
+					}
+					else
+					{
+						grid = GetGridFromCoord(forwardCoord);
+						if (grid != null) return grid;
+					}
+
+					if (testedGrids.ContainsKey(reverseCoord) && !testedGrids[reverseCoord].Hit)
+					{
+						reverseDirection = Vector2Int.zero;
+					}
+					else
+					{
+						grid = GetGridFromCoord(reverseCoord);
+						if (grid != null) return grid;
+					}
+				}
 			}
 
 			// Check in any direction next
