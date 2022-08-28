@@ -83,16 +83,8 @@ public class AIController : BoardController
 
 	Grid TestFromLastHits()
 	{
-		int tries = 20;
 		while (hitGrids.Count > 0)
 		{
-			tries--;
-			if (tries < 0)
-			{
-				Debug.LogError("Went past max tries!!!");
-				return null;
-			}
-
 			Grid GetGridFromCoord(Vector2Int coord)
 			{
 				if (testedGrids.ContainsKey(coord)) return null;
