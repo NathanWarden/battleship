@@ -7,4 +7,10 @@ public class Menu : MonoBehaviour
 	{
 		SceneManager.LoadScene(sceneName);
 	}
+
+
+	public void Quit()
+	{
+		Application.Quit();
+	}
 }
