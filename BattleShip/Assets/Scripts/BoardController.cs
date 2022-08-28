@@ -2,8 +2,8 @@ using UnityEngine;
 
 public abstract class BoardController : MonoBehaviour
 {
-	private BoardData thisBoard;
-	private BoardData opponentBoard;
+	protected BoardData thisBoard;
+	protected BoardData opponentBoard;
 
 	public bool MyMove { get; set; }
 
@@ -14,12 +14,13 @@ public abstract class BoardController : MonoBehaviour
 	}
 
 
-	protected void MakeMove(Grid grid)
+	protected bool MakeMove(Grid grid)
 	{
 		var hit = opponentBoard.TestGrid(grid.Coords);
 		var trackerGrid = thisBoard.GetTrackerGrid(grid.Coords);
 		trackerGrid.SetHitStatus(hit);
 		grid.gameObject.SetActive(hit);
+		return hit;
 	}
 
 

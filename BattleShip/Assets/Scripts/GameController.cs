@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 public class GameController : MonoBehaviour
 {
@@ -11,6 +10,8 @@ public class GameController : MonoBehaviour
 
 	private bool gameStarted;
 	private BoardController currentController;
+	public bool waitBetweenMoves;
+	private bool wait;
 
 
 	public void SetupComplete(BoardData board)
@@ -36,12 +37,14 @@ public class GameController : MonoBehaviour
 		}
 
 		if (!gameStarted) return;
+		if (Wait()) return;
 		if (!currentController.MyMove)
 		{
 			if (currentController.CheckForWin())
 			{
 				print(currentController.name + " wins!!!");
 				gameStarted = false;
+				wait = false;
 			}
 
 			if (currentController == playerBoardController)
@@ -49,6 +52,24 @@ public class GameController : MonoBehaviour
 			else
 				currentController = playerBoardController;
 			currentController.MyMove = true;
+			wait = true;
 		}
+	}
+
+
+	void OnGUI()
+	{
+		if (Wait())
+		{
+			if (GUILayout.Button("Next"))
+			{
+				wait = false;
+			}
+		}
+	}
+
+	private bool Wait()
+	{
+		return waitBetweenMoves && wait;
 	}
 }
