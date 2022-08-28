@@ -51,7 +51,7 @@ public class GameController : MonoBehaviour
 
 		if (currentController.CheckForWin())
 		{
-			print(currentController.name + " wins!!!");
+			Debug.Log(currentController.name + " wins!!!");
 			gameStarted = false;
 			wait = false;
 			return;
