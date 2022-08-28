@@ -6,12 +6,15 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 22013c58a84718caea8e9fb7656481f5
+  - enabled: 1
     path: Assets/Scenes/NormalGame.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/BoardsSideBySide.unity
     guid: b93968df9caaad63e93d3235b1dc8ae8
   - enabled: 1
-    path: Assets/Scenes/BoardsSideBySideOnlyAI.unity
+    path: Assets/Scenes/AIvsAI.unity
     guid: 5af3018197a9e1ddcb4926c238e8bdcc
   m_configObjects: {}

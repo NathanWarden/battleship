@@ -1,11 +1,20 @@
+using TMPro;
 using UnityEngine;
 
 public abstract class BoardController : MonoBehaviour
 {
 	protected BoardData thisBoard;
 	protected BoardData opponentBoard;
+	[SerializeField] private TextMeshProUGUI shipSunkMessage;
 
 	public bool MyMove { get; set; }
+
+
+	protected virtual void Awake()
+	{
+		shipSunkMessage.text = "";
+	}
+
 
 	public virtual void Setup(BoardData thisBoard, BoardData opponentBoard)
 	{
@@ -22,6 +31,18 @@ public abstract class BoardController : MonoBehaviour
 		var grid = opponentBoard.GetBoardGrid(coords);
 		grid.SetPegActive(true);
 		grid.gameObject.SetActive(hit);
+
+		if (hit && grid.Ship.Sunk())
+		{
+			shipSunkMessage.text = name + " sunk a ship!";
+		}
+		else
+		{
+			shipSunkMessage.text = "";
+		}
+
+		Debug.Log(name + " made move " + coords);
+
 		return hit;
 	}
 

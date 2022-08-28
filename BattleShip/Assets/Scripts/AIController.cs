@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class AIController : BoardController
 {
+	[SerializeField] private float aiDelay = 1f;
 	private float timer;
 	private Dictionary<Vector2Int, Grid> untestedGrids = new();
 	private List<Grid> hitGrids = new();
@@ -27,7 +28,7 @@ public class AIController : BoardController
 
 		if (timer < 0)
 		{
-			timer += .1f;
+			timer += aiDelay;
 
 			if (untestedGrids.Count == 0) return;
 

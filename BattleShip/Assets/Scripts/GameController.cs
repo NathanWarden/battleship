@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,7 @@ public class GameController : MonoBehaviour
 	[SerializeField] private BoardController playerBoardController;
 	[SerializeField] private BoardData aiBoard;
 	[SerializeField] private BoardController aiBoardController;
+	[SerializeField] private TextMeshProUGUI messageText;
 
 	private bool gameStarted;
 	private BoardController currentController;
@@ -17,6 +19,7 @@ public class GameController : MonoBehaviour
 	public void SetupComplete(BoardData board, BoardController controller)
 	{
 		board.Setup = true;
+		messageText.text = "";
 
 		if (board == playerBoard)
 		{
@@ -45,13 +48,18 @@ public class GameController : MonoBehaviour
 			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		}
 
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			SceneManager.LoadScene("Menu");
+		}
+
 		if (!gameStarted) return;
 		if (Wait()) return;
 		if (currentController.MyMove) return;
 
 		if (currentController.CheckForWin())
 		{
-			Debug.Log(currentController.name + " wins!!!");
+			messageText.text = currentController.name + " wins!";
 			gameStarted = false;
 			wait = false;
 			return;

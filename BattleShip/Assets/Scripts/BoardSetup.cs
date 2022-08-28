@@ -76,15 +76,23 @@ public class BoardSetup : MonoBehaviour
 		if (currentShip == null) return;
 
 		var ray = mainCam.ScreenPointToRay(Input.mousePosition + Vector3.forward * 10);
+		Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 0.5f);
 		var hitCount = Physics.RaycastNonAlloc(ray, hits, Mathf.Infinity);
+		var camPos = mainCam.transform.position;
+		var closestHit = Mathf.Infinity;
 		int hitIndex = -1;
 
 		for (int i = 0; i < hitCount; i++)
 		{
 			if (hits[i].transform.tag.Equals("Grid"))
 			{
-				hitIndex = i;
-				break;
+				var dist = (camPos - hits[i].point).sqrMagnitude;
+
+				if (dist < closestHit)
+				{
+					hitIndex = i;
+					closestHit = dist;
+				}
 			}
 		}
 
