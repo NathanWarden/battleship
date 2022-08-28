@@ -42,7 +42,7 @@ public class GameController : MonoBehaviour
 	{
 		if (Input.GetKeyDown(KeyCode.R))
 		{
-			SceneManager.LoadScene(0);
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		}
 
 		if (!gameStarted) return;
@@ -73,6 +73,11 @@ public class GameController : MonoBehaviour
 			if (GUILayout.Button("Next"))
 			{
 				wait = false;
+			}
+
+			if (GUILayout.Button("Disable Waiting"))
+			{
+				waitBetweenMoves = false;
 			}
 		}
 	}
