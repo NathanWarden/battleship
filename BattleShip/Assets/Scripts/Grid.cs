@@ -15,16 +15,15 @@ public class Grid : MonoBehaviour
 	public Ship Ship { get; set; }
 
 
-	void Start()
+	public void SetPegActive(bool active)
 	{
-		if (Ship != null)
-			pegRenderer.sharedMaterial = hitMaterial;
+		peg.SetActive(active);
 	}
 
-	public void SetHitStatus(bool hit)
+
+	public void SetToHitColor(bool hit, bool setActive = true)
 	{
-		if (hit)
-			pegRenderer.sharedMaterial = hitMaterial;
-		gameObject.SetActive(true);
+		if (hit) pegRenderer.sharedMaterial = hitMaterial;
+		gameObject.SetActive(setActive);
 	}
 }

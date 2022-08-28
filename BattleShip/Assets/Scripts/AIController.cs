@@ -43,7 +43,7 @@ public class AIController : BoardController
 
 			untestedGrids.Remove(grid.Coords);
 
-			if (MakeMove(grid))
+			if (MakeMove(grid.Coords))
 			{
 				// In the game the player would announce the ship was sunk, so simulate this in the AI
 				//		by removing testing from existing hit grids that belong to the sunken ship

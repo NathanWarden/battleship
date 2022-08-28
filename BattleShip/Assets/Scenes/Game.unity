@@ -156,6 +156,7 @@ MonoBehaviour:
   playerBoardController: {fileID: 368427752}
   aiBoard: {fileID: 1882773630}
   aiBoardController: {fileID: 1882773631}
+  waitBetweenMoves: 0
 --- !u!4 &38092058
 Transform:
   m_ObjectHideFlags: 0
@@ -209,6 +210,10 @@ PrefabInstance:
     - target: {fileID: 7974192601884128770, guid: c28aa52ccf1fcb888917e4268201cd9c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7974192601884128771, guid: c28aa52ccf1fcb888917e4268201cd9c, type: 3}
+      propertyPath: isAI
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7974192601884128771, guid: c28aa52ccf1fcb888917e4268201cd9c, type: 3}
       propertyPath: gameController
@@ -531,7 +536,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!81 &952389515
 AudioListener:
   m_ObjectHideFlags: 0

@@ -14,9 +14,18 @@ public class GameController : MonoBehaviour
 	private bool wait;
 
 
-	public void SetupComplete(BoardData board)
+	public void SetupComplete(BoardData board, BoardController controller)
 	{
 		board.Setup = true;
+
+		if (board == playerBoard)
+		{
+			playerBoardController = controller;
+		}
+		else
+		{
+			aiBoardController = controller;
+		}
 
 		if (playerBoard.Setup && aiBoard.Setup)
 		{
@@ -38,22 +47,22 @@ public class GameController : MonoBehaviour
 
 		if (!gameStarted) return;
 		if (Wait()) return;
-		if (!currentController.MyMove)
-		{
-			if (currentController.CheckForWin())
-			{
-				print(currentController.name + " wins!!!");
-				gameStarted = false;
-				wait = false;
-			}
+		if (currentController.MyMove) return;
 
-			if (currentController == playerBoardController)
-				currentController = aiBoardController;
-			else
-				currentController = playerBoardController;
-			currentController.MyMove = true;
-			wait = true;
+		if (currentController.CheckForWin())
+		{
+			print(currentController.name + " wins!!!");
+			gameStarted = false;
+			wait = false;
+			return;
 		}
+
+		if (currentController == playerBoardController)
+			currentController = aiBoardController;
+		else
+			currentController = playerBoardController;
+		currentController.MyMove = true;
+		wait = true;
 	}
 
 

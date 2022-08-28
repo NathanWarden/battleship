@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class BoardSetup : MonoBehaviour
 {
+	[SerializeField] private bool isAI;
 	[SerializeField] GameController gameController;
 	[SerializeField] BoardData boardData;
 	int boardSize => boardData.BoardSize;
 
 	[SerializeField] Transform shipGraphics;
 	private Transform shipBoard;
+	private Grid[] boardGrids;
 	[SerializeField] Transform trackerGraphics;
 	private Transform trackerBoard;
+	private Grid[] trackerGrids;
 
 	[SerializeField] GameObject gridSource;
 	[SerializeField] GameObject textSource;
@@ -35,7 +38,11 @@ public class BoardSetup : MonoBehaviour
 		currentShip = ships[0].GetComponent<Ship>();
 		shipBoard.GetChild(0).gameObject.SetActive(true);
 
-		RandomlyPlaceShips();
+		if (isAI)
+		{
+			canPlaceShip = true;
+			RandomlyPlaceShips();
+		}
 	}
 
 
@@ -46,17 +53,29 @@ public class BoardSetup : MonoBehaviour
 
 		enabled = false;
 
-		gameController.SetupComplete(boardData);
+		if (!isAI)
+		{
+			foreach (var grid in trackerGrids)
+			{
+				grid.gameObject.SetActive(true);
+			}
+		}
+
+		BoardController controller = isAI ?
+				gameObject.GetComponent<AIController>()
+				: gameObject.GetComponent<PlayerController>();
+		gameController.SetupComplete(boardData, controller);
 	}
 
 
 	private RaycastHit[] hits = new RaycastHit[10];
+	private bool canPlaceShip;
 
 	void Update()
 	{
 		if (currentShip == null) return;
 
-		var ray = mainCam.ScreenPointToRay(Input.mousePosition);
+		var ray = mainCam.ScreenPointToRay(Input.mousePosition + Vector3.forward * 10);
 		var hitCount = Physics.RaycastNonAlloc(ray, hits, Mathf.Infinity);
 		int hitIndex = -1;
 
@@ -71,7 +90,8 @@ public class BoardSetup : MonoBehaviour
 
 		if (hitIndex >= 0)
 		{
-			MoveCurrentShip(hits[hitIndex].transform.position);
+			MoveCurrentShip(hits[hitIndex].transform.localPosition);
+			canPlaceShip = true;
 		}
 
 		if (Input.GetMouseButtonDown(1) && currentShip.isActiveAndEnabled)
@@ -113,15 +133,18 @@ public class BoardSetup : MonoBehaviour
 
 	private void TryPlaceShip()
 	{
+		if (!canPlaceShip) return;
 		var results = currentShip.CheckPlacement();
 		if (!results.validPlacement) return;
 
 		foreach (var grid in results.placementGrids)
 		{
+			grid.SetToHitColor(true, false);
 			grid.Used = true;
 			grid.Ship = currentShip;
 		}
 
+		canPlaceShip = isAI;
 		GetNextShip();
 	}
 
@@ -140,8 +163,8 @@ public class BoardSetup : MonoBehaviour
 		shipGraphics.localScale = scale;
 		trackerGraphics.localScale = scale;
 
-		var boardGrids = SetupGrid(shipBoard);
-		var trackerGrids = SetupGrid(trackerBoard);
+		boardGrids = SetupGrid(shipBoard);
+		trackerGrids = SetupGrid(trackerBoard);
 		gridSource.SetActive(false);
 		boardData.SetGrids(boardGrids, trackerGrids);
 		textSource.SetActive(false);
@@ -187,6 +210,7 @@ public class BoardSetup : MonoBehaviour
 				newGrid.transform.localPosition = new Vector3(-boardSize/2f + 1 + x, 0, boardSize/2f - 1 - y);
 				newGrid.name = $"{x},{y}";
 				grid.Coords = new Vector2Int(x, y);
+				grid.SetPegActive(isAI);
 				grids.Add(grid);
 			}
 		}

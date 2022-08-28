@@ -16,6 +16,12 @@ public class BoardData : MonoBehaviour
 	private Dictionary<Vector2Int, Grid> trackerGridMap = new();
 
 
+	public Grid GetBoardGrid(Vector2Int coords)
+	{
+		return boardGridMap[coords];
+	}
+
+
 	public Grid GetTrackerGrid(Vector2Int coords)
 	{
 		return trackerGridMap[coords];
