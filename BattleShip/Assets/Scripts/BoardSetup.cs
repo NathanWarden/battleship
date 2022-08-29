@@ -5,6 +5,7 @@ using UnityEngine;
 public class BoardSetup : MonoBehaviour
 {
 	[SerializeField] private bool isAI;
+	[SerializeField] private bool hideShips;
 	[SerializeField] GameController gameController;
 	[SerializeField] BoardData boardData;
 	int boardSize => boardData.BoardSize;
@@ -65,6 +66,14 @@ public class BoardSetup : MonoBehaviour
 				gameObject.GetComponent<AIController>()
 				: gameObject.GetComponent<PlayerController>();
 		gameController.SetupComplete(boardData, controller);
+
+		if (hideShips)
+		{
+			foreach (var ship in ships)
+			{
+				ship.SetActive(false);
+			}
+		}
 	}
 
 

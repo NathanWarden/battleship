@@ -602,6 +602,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isAI: 0
+  hideShips: 0
   gameController: {fileID: 0}
   boardData: {fileID: 2246465881465947507}
   shipGraphics: {fileID: 225803918361824333}
@@ -609,11 +610,11 @@ MonoBehaviour:
   gridSource: {fileID: 3984461504273922276}
   textSource: {fileID: 7511833328393347443}
   shipPrefabs:
-  - {fileID: -2189817807841389863, guid: a7f8cfc50ac1abff3afab99f5356206b, type: 3}
-  - {fileID: -2276492646350222455, guid: f7e3e70276825462ead9b17483b18e05, type: 3}
-  - {fileID: -2276492646350222455, guid: f7e3e70276825462ead9b17483b18e05, type: 3}
-  - {fileID: -6933467381696337380, guid: 4e007834e89b9cd0ba9ead54b62a7afd, type: 3}
   - {fileID: 2147321474460992753, guid: 80066b627bb898245bbdc75f03ed5fd5, type: 3}
+  - {fileID: -6933467381696337380, guid: 4e007834e89b9cd0ba9ead54b62a7afd, type: 3}
+  - {fileID: -2276492646350222455, guid: f7e3e70276825462ead9b17483b18e05, type: 3}
+  - {fileID: -2276492646350222455, guid: f7e3e70276825462ead9b17483b18e05, type: 3}
+  - {fileID: -2189817807841389863, guid: a7f8cfc50ac1abff3afab99f5356206b, type: 3}
 --- !u!114 &2246465881465947507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -639,6 +640,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d47de5ce7109511bbd1cf1a28f49282, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipSunkMessage: {fileID: 0}
+  aiDelay: 1
 --- !u!114 &1125286009644474646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,6 +654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b502ecf10df059f848f7ee8ec3004741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shipSunkMessage: {fileID: 0}
 --- !u!1 &8046669219587059878
 GameObject:
   m_ObjectHideFlags: 0
